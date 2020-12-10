@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import copy
+import time
 
 def loop_checker(seq):
     cur = global_var = 0
@@ -30,21 +30,35 @@ def main():
 
     global_var = 0
     seq = [[func(e) for func, e in zip([str, int], elem)] for elem in [s.split() for s in seq if s != '']]
-
+    start = time.time()
     # Exhaust through all command until we get a loop free sequence
     for n, command in enumerate(seq):
-        seq_copy = copy.deepcopy(seq)
+        # seq_copy = copy.deepcopy(seq)
         if command[0] == 'jmp':
-            seq_copy[n][0] = 'nop'
-            global_var = loop_checker(seq_copy)
+            # seq_copy[n][0] = 'nop'
+            del seq[n]
+            seq.insert(n, ['nop', command[1]])
+            global_var = loop_checker(seq)
             if global_var:
                 break
+            else:
+                del seq[n]
+                seq.insert(n, [command[0], command[1]])
         elif command[0] == 'nop':
-            seq_copy[n][0] = 'jmp'
-            global_var = loop_checker(seq_copy)
+            # seq_copy[n][0] = 'jmp'
+            del seq[n]
+            seq.insert(n, ['jmp', command[1]])
+            global_var = loop_checker(seq)
             if global_var:
                 break
-    print(global_var)
+            else:
+                del seq[n]
+                seq.insert(n, [command[0], command[1]])
+    end = time.time()
+    if global_var:
+        print("fixed in", end - start, "time and the accumulator is", global_var)
+    else:
+        print("Could not fix it")
 
 
 if __name__ == "__main__":
