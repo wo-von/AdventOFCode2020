@@ -33,9 +33,7 @@ def main():
     start = time.time()
     # Exhaust through all command until we get a loop free sequence
     for n, command in enumerate(seq):
-        # seq_copy = copy.deepcopy(seq)
         if command[0] == 'jmp':
-            # seq_copy[n][0] = 'nop'
             del seq[n]
             seq.insert(n, ['nop', command[1]])
             global_var = loop_checker(seq)
@@ -45,7 +43,6 @@ def main():
                 del seq[n]
                 seq.insert(n, [command[0], command[1]])
         elif command[0] == 'nop':
-            # seq_copy[n][0] = 'jmp'
             del seq[n]
             seq.insert(n, ['jmp', command[1]])
             global_var = loop_checker(seq)
@@ -54,7 +51,9 @@ def main():
             else:
                 del seq[n]
                 seq.insert(n, [command[0], command[1]])
+    
     end = time.time()
+    
     if global_var:
         print("fixed in", end - start, "time and the accumulator is", global_var)
     else:
