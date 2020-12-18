@@ -32,15 +32,40 @@ def do_the_math(strlst):
         temp = temp + strlst[3:]
         return do_the_math(temp)
 
+def do_advanced_math(lst):
+    '''
+    new rules for part 2, addition has precedes multiplication
+    '''
+    if '*' not in lst:
+        return do_the_math(lst)
+    elif '+' not in lst:
+        return do_the_math(lst)
+    else:
+        stack = list()
+        i = 0
+        while i < len(lst):
+            if lst[i] != '+':
+                stack.append(lst[i])
+                i += 1
+            else:
+                temp = list()
+                temp.append(stack.pop())
+                temp.append(lst[i])
+                temp.append(lst[i+1])
+                i += 2
+                result = str(do_the_math(temp))
+                stack.append(result)
+        return do_the_math(stack) # All addistion should be done by now
+
 def do_whole(lst):
     '''
     gets a list of strings, and starts putting it into a stack
-    untill matching parens are found, then does the math and
+    until matching parens are found, then does the math and
     puts the result back into stack
     '''
     stack = list()
     if "(" and ")" not in lst:
-        return do_the_math(lst)
+        return do_advanced_math(lst)
     else:
         for e in lst:
             if e != ")":
@@ -54,11 +79,12 @@ def do_whole(lst):
                     else:
                         temp.append(item)
                 temp.reverse()
-                result = str(do_the_math(temp))
+                result = str(do_advanced_math(temp))
                 stack.append(result)
-    return do_the_math(stack)
+    return do_advanced_math(stack)
 
 finalcount = list()
+
 with open("input") as f:
     for line in f:
         listtemp = parse_string_into_list(line)
