@@ -57,28 +57,15 @@ def check_message(message, paths):
     '''
     Check if a message is in accordance with rule 0 (and its expansion)
     '''
-    checksout = False
     for path in paths:
-        if isinstance(path, list):
-            if any([isinstance(e, list) for e in path]):
-                checksout |= check_message(message, path)
-                if checksout == False:
-                    break
-            else:
-                if message[:"".join(path).__len__()] == "".join(path):
-                    if len(message["".join(path).__len__():]) == 0:
-                        return True
-                    else:
-                        checksout |= check_message(message["".join(path).__len__():], path)
+        if isinstance(path, list): # if it is a list
+            if any([ isinstance(e, list) for e in path ]): # That contains list
+                return check_message(message, path)
+            else: # it is a list of strings
+                if message[:len(path)] != "".join(path):
+                    return False 
                 else:
-                    return False
-        else: # Then it is a standalone string, just check it          
-            if message[0] == path:
-                checksout |= check_message(message[1:], path)
-            else:
-                return False
-    return checksout
-
+                    return check_message(message[len(path):], path)
 total_wrong = 0
 
 for message in messages:
