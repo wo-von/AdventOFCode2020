@@ -1,0 +1,18 @@
+#!/usr/bin/python3
+
+f = open("/home/sina/Learning/adventOfCode/AdventOFCode2020/2/input-2.txt")
+inputraw = f.read()
+f.close()
+
+inputlist = inputraw.split('\n')
+
+inputlist = inputlist[:-1]
+processedinput = [ s.split(': ') for s in inputlist ]
+
+wrong_count = 0
+
+for password in processedinput:
+    if password[1].count(password[0].split(' ')[1]) < int(password[0].split(' ')[0].split('-')[0]) or password[1].count(password[0].split(' ')[1]) > int(password[0].split(' ')[0].split('-')[1]):
+        wrong_count += 1
+
+print("valid number of passwords is",len(processedinput) - wrong_count)
